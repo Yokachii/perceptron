@@ -73,7 +73,7 @@ void update(Perceptron *p, float *tab);
  * \param nb_epoques nombre de cycle
  * \param d Dataset to train on
  */ 
-float train(Perceptron *p, int nb_epoques, Dataset *d, Dataset *dt, int breakIfTrained);
+float train(Perceptron *p, int nb_epoques, Dataset *d, Dataset *dt, int breakIfTrained, int *nb_epoques_max, float *acc_max);
 
 
 /**

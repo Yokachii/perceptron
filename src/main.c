@@ -40,7 +40,9 @@ int main(int argc, char *argv[]) {
     float accBefore=calc_acc(p,tt);
     if(HumanOutput==1) printf("\nAcc avant train : %f\n\n",accBefore);
 
-    int epoques = train(p,nb_epoques,tr,tt,StopWhenTrained);
+    int epoquesMax;
+    float maxAcc;
+    int epoques = train(p,nb_epoques,tr,tt,StopWhenTrained,&epoquesMax,&maxAcc);
 
     MatrixConfusion *matrix = matrice_confusion(p,tt);
     
@@ -48,9 +50,10 @@ int main(int argc, char *argv[]) {
     float accAfter=calc_acc(p,tt);
     if(HumanOutput==1){
         printf("Acc après train : %f\n\n",accAfter);
+        printf("epoquesMax : %d\nAccMax:%f\n",epoquesMax,maxAcc);
         display_matrix(matrix);
     }else{
-        printf("%d;%f;%f;%d;%d;%d;%d",epoques,accBefore,accAfter,matrix->FN,matrix->FP,matrix->TN,matrix->TP);
+        printf("%d;%f;%f;%d;%d;%d;%d;%d;%f",epoques,accBefore,accAfter,matrix->FN,matrix->FP,matrix->TN,matrix->TP,epoquesMax,maxAcc);
     }
 
 

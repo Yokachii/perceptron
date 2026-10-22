@@ -9,6 +9,8 @@ typedef struct {
     int FP;
     int TN;
     int TP;
+    float accMax;
+    int epoquesMax;
 } Data;
 
 typedef struct {
@@ -52,9 +54,9 @@ Data *getResults(int epoques, float taux, float ratio, int normalized, int stopW
     }
 
     if (fgets(path, sizeof(path), fp) != NULL) {
-        int itemsParsed = sscanf(path, "%d;%f;%f;%d;%d;%d;%d", &res->epoques, &res->accBefore, &res->accAfter, &res->FN, &res->FP, &res->TN, &res->TP);
+        int itemsParsed = sscanf(path, "%d;%f;%f;%d;%d;%d;%d;%d;%f", &res->epoques, &res->accBefore, &res->accAfter, &res->FN, &res->FP, &res->TN, &res->TP, &res->epoquesMax, &res->accMax);
 
-        if (itemsParsed != 7) {
+        if (itemsParsed != 9) {
             printf("Attention : tous les champs n'ont pas pu être parsés correctement (reçu : %s)\n", path);
         }
     }
@@ -72,9 +74,9 @@ int main() {
         return 1;
     }
 
-    fprintf(csvFile, "normalized,ratio,taux,epoques_demandes,epoques_reels,accBefore,accAfter,FN,FP,TN,TP\n");
+    fprintf(csvFile, "normalized,ratio,taux,epoques_demandes,epoques_reels,accBefore,accAfter,FN,FP,TN,TP,epoques_max,accMax\n");
     
-    float r1[] = {1,100};
+    float r1[] = {1,500};
     Param *epoques = malloc(sizeof(Param));
     epoques->ranges=r1;
     epoques->step=1;
@@ -97,9 +99,9 @@ int main() {
     for(float i = normalized->ranges[0]; i <= normalized->ranges[1]; i += normalized->step) {
         for(float j = ratio->ranges[0]; j <= ratio->ranges[1]; j += ratio->step) {
             for(float k = taux->ranges[0]; k <= taux->ranges[1]; k += taux->step) {
-                for(float l = epoques->ranges[0]; l <= epoques->ranges[1]; l += epoques->step) {
+                // for(float l = epoques->ranges[0]; l <= epoques->ranges[1]; l += epoques->step) {
 
-                    int current_epoques = (int)l;
+                    int current_epoques = (int)epoques->ranges[1];
                     float current_taux = k;
                     float current_ratio = j;
                     int current_norm = (int)i;
@@ -111,17 +113,17 @@ int main() {
                     int isfullyrun = (current_epoques > res->epoques) ? 0 : 1; 
 
                     // Affichage console
-                    printf("Norm: %d | Ratio: %.1f | Taux: %.2f | Ep: %d/%d | Acc After: %.2f\n", 
-                           current_norm, current_ratio, current_taux, res->epoques, current_epoques, res->accAfter);
+                    printf("Norm: %d | Ratio: %.1f | Taux: %.2f | Ep: %d/%d | Acc After: %.2f | EpoquesMax : %d | AccMax : %.2f\n", 
+                           current_norm, current_ratio, current_taux, res->epoques, current_epoques, res->accAfter, res->epoquesMax, res->accMax);
 
                     // Stockage dans le fichier CSV
-                    fprintf(csvFile, "%d,%.2f,%.2f,%d,%d,%.4f,%.4f,%d,%d,%d,%d\n",
+                    fprintf(csvFile, "%d,%.2f,%.2f,%d,%d,%.4f,%.4f,%d,%d,%d,%d,%d,%.4f\n",
                             current_norm, current_ratio, current_taux, current_epoques, 
                             res->epoques, res->accBefore, res->accAfter, 
-                            res->FN, res->FP, res->TN, res->TP);
+                            res->FN, res->FP, res->TN, res->TP, res->epoquesMax, res->accMax);
 
                     free(res);
-                }
+                // }
             }
         }
     }

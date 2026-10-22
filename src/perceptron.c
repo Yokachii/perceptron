@@ -105,9 +105,12 @@ void update(Perceptron *p, float *tab){
  * \param nb_epoques nombre de cycle
  * \param d Dataset to train on
  */ 
-float train(Perceptron *p, int nb_epoques, Dataset *d, Dataset *dt, int breakIfTrained){
+float train(Perceptron *p, int nb_epoques, Dataset *d, Dataset *dt, int breakIfTrained, int *nb_epoques_max, float *acc_max){
     int firstEpoqueInt;
     float firstEpoqueV;
+
+    int bestAccEp;
+    float bestAcc;
     for(int i = 0; i<nb_epoques; i++){
         shuffle(d);
 
@@ -117,6 +120,8 @@ float train(Perceptron *p, int nb_epoques, Dataset *d, Dataset *dt, int breakIfT
             // printf("Acc sur dataset de test après %d epoques : %f\n",i,acc);
 
             if(acc==1) {
+                *acc_max=1;
+                *nb_epoques_max=acc;
                 return i;
             }
         }
@@ -126,10 +131,19 @@ float train(Perceptron *p, int nb_epoques, Dataset *d, Dataset *dt, int breakIfT
             firstEpoqueInt=i;
         }
 
+        if(acc>bestAcc){
+            bestAcc=acc;
+            bestAccEp=i;
+        }
+
         for(int j = 0; j<d->n; j++){
             update(p,d->data[j]);
         }
     }
+
+    *acc_max=bestAcc;
+    *nb_epoques_max=bestAccEp;
+
     return firstEpoqueInt;
 }
 
