@@ -1,6 +1,0 @@
-Champignons :
-Cycles Taux Training_Ratio Normalized
-1000    0.1    1              1 
-10000    0.1    1              1 
-1000    0.1    1              1 
-1000    0.1    1              1 
