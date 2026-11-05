@@ -34,4 +34,5 @@ else:
     plt.ylabel("Accuracy après entraînement (accAfter)")
     plt.grid(True, linestyle="--", alpha=0.6)
     plt.legend(title="Taux d'apprentissage")
+    plt.savefig("graph1.png", dpi=150, bbox_inches="tight")
     plt.show()

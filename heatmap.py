@@ -30,6 +30,7 @@ else:
     plt.title(f"Heatmap de {metric_to_plot_1} selon le Taux et le Ratio (Normalisé = {norm_val})")
     plt.xlabel("Taux d'apprentissage")
     plt.ylabel("Ratio d'entraînement")
+    plt.savefig("heatmap1.png", dpi=150, bbox_inches="tight")
     plt.show()
 
     # -------------------------------------------------------------------------
@@ -48,4 +49,5 @@ else:
     plt.title(f"Vitesse de convergence : Époques nécessaires selon le Taux et le Ratio (Normalisé = {norm_val})")
     plt.xlabel("Taux d'apprentissage")
     plt.ylabel("Ratio d'entraînement")
+    plt.savefig("heatmap2.png", dpi=150, bbox_inches="tight")
     plt.show()
